@@ -1,0 +1,11 @@
+{
+  "manifest_version": 2,
+  "name": "Youtube Playlist Duration Calculator",
+  "version": "0.1.0",
+  "content_scripts": [
+    {
+      "matches": ["*://www.youtube.com/*"],
+      "js": ["lib/script.js"]
+    }
+  ]
+}
