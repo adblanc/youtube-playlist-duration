@@ -1,20 +1,34 @@
+const TIMESTAMP_SELECTOR =
+  "#overlays > ytd-thumbnail-overlay-time-status-renderer > span";
+
 let playlistTime = {
   hours: 0,
   minutes: 0,
   seconds: 0
 };
 
+addEventListener("yt-navigate-start", () => {
+  calculatePlaylistDuration();
+});
+
 function calculatePlaylistDuration() {
   if (!isPlaylist()) return;
 
   console.log("Calculating playlist duration...");
+  resetTime();
   const videos = getPlaylistItems();
   const notSeen = filterAlreadySeenVideos(videos);
 
   notSeen.forEach(v => {
-    observeVideoLength(v);
+    addTimeStamp(v);
   });
 }
+
+const resetTime = () => {
+  playlistTime.hours = 0;
+  playlistTime.minutes = 0;
+  playlistTime.seconds = 0;
+};
 
 const isPlaylist = () => {
   const urlParams = new URLSearchParams(window.location.search);
@@ -22,19 +36,41 @@ const isPlaylist = () => {
 };
 
 const getPlaylistItems = () => {
-  document.getElementById;
   return Array.from(document.querySelectorAll("#playlist-items"));
 };
 
-const filterAlreadySeenVideos = (videos: any[]) => {
-  const watching = videos.find(v => v.hasAttribute("selected"));
+const filterAlreadySeenVideos = (videos: Element[]) => {
+  const watching = getWatchingVideo(videos);
   if (!watching) return videos;
 
   const index = videos.indexOf(watching);
   return videos.slice(index, videos.length);
 };
 
-const observeVideoLength = (video: Document) => {
+const getWatchingVideo = (videos: Element[]) => {
+  const videoIndex = getCurrentVideoIndex();
+  return videoIndex
+    ? videos[parseInt(videoIndex, 10) - 1]
+    : videos.find(v => v.hasAttribute("selected"));
+};
+
+const getCurrentVideoIndex = () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get("index");
+};
+
+const addTimeStamp = (video: Element) => {
+  const timestamp = getTimeStampElement(video);
+
+  if (!timestamp) observeVideoLength(video);
+  else addTime(timestamp.textContent as string);
+};
+
+const getTimeStampElement = (video: Element) => {
+  return video.querySelector(TIMESTAMP_SELECTOR);
+};
+
+const observeVideoLength = (video: Element) => {
   const { observer, options } = setupObserver();
 
   observer.observe(video, options);
