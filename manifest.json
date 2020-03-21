@@ -2,10 +2,17 @@
   "manifest_version": 2,
   "name": "Youtube Playlist Duration Calculator",
   "version": "0.1.0",
+  "description": "Display remaining watching time of your youtube playlist.",
+  "icons": {
+    "16": "16.png",
+    "48": "48.png",
+    "128": "128.png"
+  },
   "content_scripts": [
     {
       "matches": ["*://www.youtube.com/*"],
       "js": ["lib/script.js"]
     }
-  ]
+  ],
+  "author": "Blanc Adrien"
 }
