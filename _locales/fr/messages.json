@@ -1,0 +1,10 @@
+{
+  "appName": {
+    "message": "Youtube Playlist Duration Calculateur",
+    "description": "Le titre de l'application dans le web store."
+  },
+  "appDesc": {
+    "message": "Affiche le temps restant de vos playlist youtube.",
+    "description": "Cette extension vous affiche le temps restant de vos playlist youtube."
+  }
+}
